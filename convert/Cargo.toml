@@ -1,0 +1,7 @@
+[package]
+name = "rgif-convert"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gif = "0.13.1"

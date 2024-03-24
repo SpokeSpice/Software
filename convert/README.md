@@ -13,17 +13,17 @@ The GIFs can be animated. The tool will process each frame individually will pre
 
 ## Requirements
 
-- Python 3.6+
-- Pillow (Python Imaging Library Fork)
-- NumPy
+- Rust
 
 ## Installation
 
+Ensure you have Rust installed on your system. You can download Rust from [here](https://www.rust-lang.org/tools/install).
+
 Ensure you have Python installed on your system. You can download Python from [here](https://www.python.org/downloads/).
 
-Next, install the required Python package by running the following command:
+Next, build the binary:
 ```bash
-pip install -r requirements.txt
+cargo build
 ```
 
 # Usage
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 To use the tool, run the following command in your terminal:
 
 ```bash
-python quantized_gif_creator.py input.gif output.gif
+cargo run input.gif output.gif
 ```
 
 Replace `input.gif` with the path to your input GIF and `output.gif` with the path to the output GIF you want to create.
