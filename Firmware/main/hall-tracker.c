@@ -155,5 +155,5 @@ void hall_tracker_init() {
     queue = xQueueCreate(10, sizeof(struct hall_tracker_trigger_event));
 
     xTaskCreate(hall_tracker_task_func, "HAL tracker task", 2048, NULL, 10, NULL);
-    // xTaskCreate(simulate_rotation_task_func, "Rotation simulator", 2048, NULL, 1, NULL);
+    //xTaskCreate(simulate_rotation_task_func, "Rotation simulator", 2048, NULL, 1, NULL);
 }

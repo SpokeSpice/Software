@@ -169,11 +169,6 @@ esp_err_t gif_tick()
     uint32_t frame;
 
     nsgif_error res = nsgif_frame_prepare(gif, &frame_rect, &delay_cs, &frame);
-    if (res == NSGIF_ERR_ANIMATION_END) {
-        nsgif_reset(gif);
-        res = nsgif_frame_prepare(gif, &frame_rect, &delay_cs, &frame);
-    }
-
     // ESP_LOGI(TAG, "frame %lu, delay %lu, rect %lu %lu %lu %lu",
     //     frame, delay_cs, frame_rect.x0, frame_rect.y0, frame_rect.x1, frame_rect.y1);
 
@@ -183,8 +178,21 @@ esp_err_t gif_tick()
         return ESP_FAIL;
     }
 
-    next_frame_time = (delay_cs == NSGIF_INFINITE) ?
-        UINT32_MAX : time_cs + delay_cs - 1;
+    if (delay_cs == NSGIF_INFINITE) {
+        if (gif_info->frame_count > 1) {
+            ESP_LOGD(TAG, "GIF animation end, looping");
+            nsgif_reset(gif);
+
+            next_frame_time = time_cs;
+
+            xSemaphoreGive(mutex);
+            return ESP_OK;
+        } else {
+            next_frame_time = UINT32_MAX;
+        }
+    } else {
+        next_frame_time = time_cs + delay_cs - 1;
+    }
 
     nsgif_bitmap_t *bitmap;
     res = nsgif_frame_decode(gif, frame, &bitmap);

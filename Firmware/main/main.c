@@ -57,6 +57,7 @@ static void update_strips_task_func(void *)
 {
     uint32_t counter = 0;
     uint64_t last_change = 0;
+    int last_angle = -1;
 
     ESP_LOGI(TAG, "Starting stripe update task");
 
@@ -67,11 +68,19 @@ static void update_strips_task_func(void *)
         int angle = hall_tracker_current_angle();
         uint64_t now = esp_timer_get_time();
 
-        if (angle < 0 && mode == MODE_GIF)
+        if (angle >= 0) {
+            if (last_angle < 0) {
+                mode = MODE_GIF;
+                playlist_next();
+            }
+        } else {
             mode = MODE_PATTERN;
+        }
+
+        last_angle = angle;
 
         if (now - last_change > 1000000 * global_app_config->pattern_change_interval_seconds) {
-            if (mode == MODE_PATTERN && angle> 0) {
+            if (mode == MODE_PATTERN && angle > 0) {
                 mode = MODE_GIF;
                 playlist_next();
             } else {
