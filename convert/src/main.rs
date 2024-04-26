@@ -47,7 +47,7 @@ fn process_frame(frame: &gif::Frame) -> Result<Frame<'static>, gif::EncodingErro
     let mut output_buffer = vec![0; OUTPUT_WIDTH as usize * OUTPUT_HEIGHT as usize * 4];
 
     let (center_x, center_y) = (frame.width / 2, frame.height / 2);
-    let vector_length = cmp::min(center_x, center_y) / 2;
+    let vector_length = cmp::min(center_x, center_y);
 
     for deg in 0..OUTPUT_WIDTH {
         let mut r = 0;
